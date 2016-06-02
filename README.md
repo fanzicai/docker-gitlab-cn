@@ -1,4 +1,4 @@
-# ** docker-gitlab-cn ** #
+# **docker-gitlab-cn** #
 Dockerfile是创建docker image的一种常用方式。本文采用dockerfile创建[gitlab-cn image](https://hub.docker.com/r/fanzi/gitlab-cn/)。该image基于Centos Image 7创建，并与mysql image联合使用。
 <!-- more -->
 
@@ -33,7 +33,12 @@ docker build --rm=true -t fanzi/gitlab-cn .
 ```
 ----------
 ## **3. Image USE** ##
+- 创建容器
 ```
 docker run -it --detach --restart always --link mysql:mysql -p 80:80 --name gitlab fanzi/gitlab-cn
+```
+- 初始化数据库
+确保mysql容器运行，只在创建容器后运行一次
+```
 docker exec -it gitlab /bin/bash -c /home/git/gitlab-init.sh
 ```
