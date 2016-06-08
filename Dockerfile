@@ -7,7 +7,7 @@ RUN yum -y install wget \
  && yum -y update \
  && yum -y group install "development tools" \
  && yum -y install epel-release \
- && yum -y install sudo vim cmake mysql mysql-devel go ruby redis nodejs nginx readline-devel gdbm-devel openssl-devel expat-devel sqlite-devel libyaml-devel libffi-devel libxml2-devel libxslt-devel libicu-devel python-devel xmlto logwatch perl-ExtUtils-CBuilder
+ && yum -y install sudo vim cmake mysql mysql-devel openssh-server go ruby redis nodejs nginx readline-devel gdbm-devel openssl-devel expat-devel sqlite-devel libyaml-devel libffi-devel libxml2-devel libxslt-devel libicu-devel python-devel xmlto logwatch perl-ExtUtils-CBuilder
 
 RUN adduser --system --shell /bin/bash --comment 'GitLab' --create-home --home-dir /home/git/ git \
  && chmod -R go+rx /home/git
@@ -43,7 +43,7 @@ RUN wget https://www.kernel.org/pub/software/scm/git/git-2.8.3.tar.gz \
  && chown redis:redis /var/run/redis \
  && chmod 755 /var/run/redis \
  && usermod -aG redis git \
- && (redis-server /etc/redis.conf &) \
+ && (redis-server /etc/redis.conf &)
 
 # GitLab
 WORKDIR /home/git/gitlab/
@@ -94,8 +94,9 @@ WORKDIR /home/git
 # Gitlab-Workhorse
 RUN git clone https://gitlab.com/gitlab-org/gitlab-workhorse.git \
  && cd gitlab-workhorse/ \
-  && git checkout v0.7.2 \
- && make
+ && git checkout v0.7.2 \
+ && make \
+ && sshd-keygen
 
 EXPOSE 80 22
 
